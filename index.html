@@ -176,6 +176,7 @@
     <button class="btn solid" onclick="openModal()">+ Añadir coche</button>
     <button class="btn" onclick="exportJSON()">JSON</button>
     <button class="btn" onclick="exportCSV()">CSV</button>
+    <button class="btn" onclick="openGh()">GitHub</button>
     <button class="btn" onclick="resetAll()">Reset</button>
   </div>
 
@@ -210,6 +211,25 @@
 </div>
 
 <div id="pop"></div>
+<div class="overlay" id="ghOverlay">
+  <div class="modal">
+    <div class="mh"><h3 class="display">Guardar en GitHub</h3><span class="label">Publica coches.json en tu repo</span></div>
+    <div class="mb">
+      <div class="grid">
+        <div class="field"><label>Usuario</label><input id="g_owner"></div>
+        <div class="field"><label>Repositorio</label><input id="g_repo"></div>
+        <div class="field"><label>Rama</label><input id="g_branch" placeholder="main"></div>
+        <div class="field"><label>Ruta del archivo</label><input id="g_path" placeholder="coches.json"></div>
+        <div class="field full"><label>Token (scope repo) · se guarda solo en este navegador</label><input id="g_token" type="password" placeholder="ghp_…" autocomplete="off"></div>
+      </div>
+      <div class="status" id="ghStatus" style="margin-top:14px"></div>
+      <div class="macts">
+        <button class="btn" onclick="closeGh()">Cerrar</button>
+        <button class="btn solid" onclick="ghPublish()">Publicar ahora</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="mh"><h3 class="display" id="modalTitle">Añadir coche</h3><span class="label" id="modalSub">Pega un enlace o rellena a mano</span></div>
@@ -541,6 +561,32 @@ function exportCSV(){
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+lines.join("\n")],{type:"text/csv"}));a.download="coches_candidatos.csv";a.click();
 }
 function resetAll(){if(confirm("¿Restaurar el catálogo original y borrar tus estados, ediciones y altas?")){st={ov:{},add:[],del:[],ed:{}};saveState();rebuild();render()}}
+
+/* Publicar en GitHub (API) */
+const GKEY="coches_gh_v1";
+let ghCfg=(()=>{try{return JSON.parse(localStorage.getItem(GKEY))||{}}catch(e){return {}}})();
+function openGh(){$("g_owner").value=ghCfg.owner||"";$("g_repo").value=ghCfg.repo||"coches-candidatos";$("g_branch").value=ghCfg.branch||"main";$("g_path").value=ghCfg.path||"coches.json";$("g_token").value=ghCfg.token||"";$("ghStatus").textContent="";$("ghOverlay").classList.add("open");}
+function closeGh(){$("ghOverlay").classList.remove("open")}
+$("ghOverlay").onclick=e=>{if(e.target.id==="ghOverlay")closeGh()};
+function ghMsg(t){$("ghStatus").textContent=t}
+async function ghPublish(){
+  ghCfg={owner:$("g_owner").value.trim(),repo:$("g_repo").value.trim(),branch:$("g_branch").value.trim()||"main",path:$("g_path").value.trim()||"coches.json",token:$("g_token").value.trim()};
+  localStorage.setItem(GKEY,JSON.stringify(ghCfg));
+  if(!ghCfg.owner||!ghCfg.repo||!ghCfg.token){ghMsg("Faltan usuario, repositorio o token.");return}
+  ghMsg("Publicando…");
+  const api="https://api.github.com/repos/"+ghCfg.owner+"/"+ghCfg.repo+"/contents/"+ghCfg.path.split("/").map(encodeURIComponent).join("/");
+  const headers={Authorization:"token "+ghCfg.token,Accept:"application/vnd.github+json"};
+  let sha;
+  try{const r=await fetch(api+"?ref="+encodeURIComponent(ghCfg.branch),{headers});
+    if(r.ok){sha=(await r.json()).sha;} else if(r.status!==404){ghMsg("No se pudo leer el archivo ("+r.status+"). Revisa usuario, repo, rama o token.");return;}
+  }catch(e){ghMsg("Error de red al leer el repositorio.");return;}
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(catalogNow(),null,1))));
+  const body={message:"Actualiza coches.json desde la web",content,branch:ghCfg.branch};if(sha)body.sha=sha;
+  try{const r=await fetch(api,{method:"PUT",headers,body:JSON.stringify(body)});
+    if(r.ok)ghMsg("✓ Publicado. GitHub Pages se actualiza en ~1 min.");
+    else{const t=await r.text();ghMsg("Error "+r.status+": "+t.slice(0,140));}
+  }catch(e){ghMsg("Error de red al publicar.");}
+}
 
 async function loadCatalog(){
   try{const r=await fetch("coches.json",{cache:"no-store"});if(r.ok){const d=await r.json();if(Array.isArray(d)&&d.length)CATALOG=d;}}catch(e){}
