@@ -89,6 +89,22 @@
   .scorepill.g{background:var(--green);border-color:var(--green);color:#fff}
   .scorepill.o{background:var(--orange);border-color:var(--orange);color:#fff}
   .scorepill.r{background:var(--red);border-color:var(--red);color:#fff}
+  #pop{position:fixed;z-index:2000;width:300px;max-width:92vw;background:var(--paper);border:1px solid var(--line);display:none;box-shadow:6px 6px 0 rgba(14,14,14,.12);pointer-events:none}
+  #pop.on{display:block}
+  #pop .pop-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}
+  #pop .pop-h b{font-size:15px;font-weight:800;line-height:1.1}
+  #pop .pf-list{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+  #pop .pf{display:grid;grid-template-columns:78px 1fr 22px;align-items:center;gap:8px}
+  #pop .pf span{font-family:"Geist Mono",monospace;font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
+  #pop .pf i{display:block;height:7px;background:#e6e5df;border:1px solid var(--hair)}
+  #pop .pf i b{display:block;height:100%;background:var(--ink)}
+  #pop .pf i b.g{background:var(--green)} #pop .pf i b.o{background:var(--orange)} #pop .pf i b.r{background:var(--red)}
+  #pop .pf em{font-family:"Geist Mono",monospace;font-style:normal;font-size:11px;text-align:right}
+  #pop .pop-pc{list-style:none;padding:10px 12px;display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--hair)}
+  #pop .pop-pc li{font-size:11px;padding-left:13px;position:relative;color:#222}
+  #pop .pop-pc li::before{content:"+";position:absolute;left:0;color:var(--green);font-weight:700}
+  #pop .pop-pc li.bad::before{content:"–";color:var(--red)}
+  #pop .pop-foot{padding:8px 12px;border-top:1px solid var(--hair);font-family:"Geist Mono",monospace;font-size:10px;color:var(--soft)}
   select.cell{border:1px solid var(--hair);background:var(--paper);font:inherit;font-size:12px;padding:5px 6px;cursor:pointer}
   .dot{display:inline-block;width:8px;height:8px;margin-right:6px;vertical-align:middle}
   .act{display:flex;gap:4px}
@@ -193,6 +209,7 @@
   </div>
 </div>
 
+<div id="pop"></div>
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="mh"><h3 class="display" id="modalTitle">Añadir coche</h3><span class="label" id="modalSub">Pega un enlace o rellena a mano</span></div>
@@ -307,12 +324,21 @@ function scoreCar(c,ctx){
   if(anio>=2017)pros.push("Matriculación reciente"); else if(anio&&anio<=2013)cons.push("Modelo antiguo");
   if(pw>=1)pros.push("Potencia ideal para primer coche"); else if(cv>140)cons.push("Bastante potente: seguro más caro");
   if(lo>=1)pros.push("En Madrid, sin traslado"); else if(lo<=.45)cons.push("Fuera de Madrid: habría que traerlo");
-  return {score:Math.round(total*100),pros,cons};
+  const bd=[
+    {k:"Motor",v:Math.round(en.v*100),w:17},
+    {k:"Precio",v:Math.round(ps*100),w:16},
+    {k:"Fiabilidad",v:Math.round(br*100),w:16},
+    {k:"Año",v:Math.round(ys*100),w:15},
+    {k:"Madrid",v:Math.round(lo*100),w:13},
+    {k:"Kilómetros",v:Math.round(ks*100),w:12},
+    {k:"Potencia",v:Math.round(pw*100),w:11},
+  ].map(x=>({...x,p:Math.round(x.v*x.w/100)}));
+  return {score:Math.round(total*100),pros,cons,bd};
 }
 function scoreAll(){
   const pr=cars.map(c=>+c.precio).filter(n=>n>0),km=cars.map(c=>+c.km).filter(n=>n>0);
   const ctx={minP:Math.min(...pr),maxP:Math.max(...pr),minK:Math.min(...km),maxK:Math.max(...km)};
-  cars.forEach(c=>{const r=scoreCar(c,ctx);c.score=r.score;c.pros=r.pros;c.cons=r.cons;});
+  cars.forEach(c=>{const r=scoreCar(c,ctx);c.score=r.score;c.pros=r.pros;c.cons=r.cons;c.bd=r.bd;});
   [...cars].sort((a,b)=>b.score-a.score).forEach((c,i)=>c.rank=i+1);
 }
 
@@ -378,13 +404,33 @@ function render(){
       <td data-l="Estado"><span class="dot" style="background:${colorEstado[c.estado]}"></span><select class="cell estado" data-id="${c.id}">${ESTADOS.map(e=>`<option ${e===c.estado?"selected":""}>${e}</option>`).join("")}</select></td>
       <td data-l="¿Recom.?"><span class="dot" style="background:${colorRec[c.rec]}"></span><select class="cell rec" data-id="${c.id}">${RECS.map(e=>`<option ${e===c.rec?"selected":""}>${e}</option>`).join("")}</select></td>
       <td data-l=""><div class="act"><button class="ibtn" data-ed="${c.id}">Editar</button><button class="ibtn" data-del="${c.id}">×</button></div></td>`;
+    tr.dataset.id=c.id;
     b.appendChild(tr);
+  });
+  b.querySelectorAll("tr").forEach(tr=>{
+    tr.onmouseenter=()=>{const c=find(tr.dataset.id);if(!c)return;$("pop").innerHTML=popHTML(c);$("pop").classList.add("on");};
+    tr.onmousemove=placePop;
+    tr.onmouseleave=()=>$("pop").classList.remove("on");
   });
   b.querySelectorAll("select.estado").forEach(s=>s.onchange=e=>{setOv(e.target.dataset.id,"estado",e.target.value)});
   b.querySelectorAll("select.rec").forEach(s=>s.onchange=e=>{setOv(e.target.dataset.id,"rec",e.target.value)});
   b.querySelectorAll("[data-ed]").forEach(x=>x.onclick=e=>openModal(e.target.dataset.ed));
   b.querySelectorAll("[data-del]").forEach(x=>x.onclick=e=>delCar(e.target.dataset.del));
 }
+function popHTML(c){
+  const bars=(c.bd||[]).map(f=>`<div class="pf"><span>${f.k}</span><i><b class="${scoreClass(f.v)}" style="width:${f.v}%"></b></i><em>${f.p}</em></div>`).join("");
+  const pros=(c.pros||[]).map(p=>`<li>${p}</li>`).join("");
+  const cons=(c.cons||[]).map(p=>`<li class="bad">${p}</li>`).join("");
+  return `<div class="pop-h"><b>${c.coche}</b><span class="scorepill ${scoreClass(c.score)}">${c.score}</span></div>
+    <div class="pf-list">${bars}</div>
+    <ul class="pop-pc">${pros}${cons}</ul>
+    <div class="pop-foot">Cada barra: nota del apartado (0–100). El número es su aportación al total ponderada por su peso.</div>`;
+}
+function placePop(ev){const p=$("pop");const w=p.offsetWidth||300,h=p.offsetHeight||260;
+  let x=ev.clientX+16,y=ev.clientY+16;
+  if(x+w>innerWidth-8)x=ev.clientX-w-16; if(x<8)x=8;
+  if(y+h>innerHeight-8)y=innerHeight-h-8; if(y<8)y=8;
+  p.style.left=x+"px";p.style.top=y+"px";}
 function setOv(id,k,v){st.ov[id]=Object.assign({},st.ov[id],{[k]:v});saveState();rebuild();render();}
 function delCar(id){const c=find(id);if(!confirm("¿Eliminar "+c.coche+"?"))return;
   if(inCatalog(id)){if(!st.del.includes(id))st.del.push(id);} else {st.add=st.add.filter(k=>k.id!==id);}
