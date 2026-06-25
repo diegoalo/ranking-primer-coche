@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coches candidatos — selección</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0e0e0e; --paper:#f7f6f2; --line:#0e0e0e; --soft:#6f6f6a;
+    --hair:#cfceC7; --green:#1f7a3d; --red:#b3261e; --amber:#9a6a00; --orange:#e8730c;
+    --disp:"Geist","Helvetica Neue",Arial,sans-serif;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);
+    font-family:"Geist","Helvetica Neue",Arial,system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.4}
+  .display{font-family:var(--disp);font-style:normal;font-weight:800;letter-spacing:-.02em}
+  .label{font-family:"Geist Mono","Geist",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+  a{color:inherit}
+
+  .frame{max-width:1320px;margin:0 auto;border:1px solid var(--line);background:var(--paper)}
+  .pad{padding:clamp(16px,2.4vw,34px)}
+  .row-line{border-top:1px solid var(--line)}
+
+  .mast{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+  .mast h1{font-size:clamp(46px,9vw,118px);line-height:.86;letter-spacing:-.01em}
+  .mast .meta{text-align:right;min-width:180px}
+  .mast .meta .big{font-size:clamp(20px,2.4vw,30px)}
+  .tagline{margin-top:14px;max-width:64ch;font-size:14px;color:#222}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stats>div{padding:16px clamp(14px,2vw,26px);border-left:1px solid var(--line)}
+  .stats>div:first-child{border-left:none}
+  .stats .n{font-size:clamp(22px,3vw,40px);line-height:1}
+  .stats .label{margin-bottom:8px}
+
+  .sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+  .sec-h h2{font-size:clamp(22px,3vw,34px);font-weight:800}
+
+  .top3{display:grid;grid-template-columns:repeat(3,1fr)}
+  .top3>article{border-left:1px solid var(--line);display:flex;flex-direction:column}
+  .top3>article:first-child{border-left:none}
+  .top3 .ph{aspect-ratio:16/10;background:#e9e8e2;border-bottom:1px solid var(--line);overflow:hidden;position:relative}
+  .top3 .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .top3 .rk{position:absolute;left:0;top:0;background:var(--ink);color:var(--paper);font-size:30px;line-height:1;padding:8px 14px}
+  .top3 .body{padding:16px clamp(14px,1.6vw,20px);display:flex;flex-direction:column;gap:10px;flex:1}
+  .top3 .nm{font-size:21px;line-height:1.1}
+  .top3 .scoreline{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:8px 0}
+  .top3 .sc{font-size:42px;line-height:1}
+  .top3 .pr{font-family:"Geist Mono","Geist",monospace;font-size:16px;font-weight:600}
+  .top3 ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+  .top3 li{font-size:12px;padding-left:14px;position:relative;color:#222}
+  .top3 li::before{content:"+";position:absolute;left:0;top:0;color:var(--green);font-weight:700}
+  .top3 li.bad::before{content:"–";color:var(--red)}
+  .top3 .lks{margin-top:auto;display:flex;gap:14px;padding-top:6px}
+  .top3 .lks a{font-family:"Geist Mono","Geist",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:2px;text-decoration:none}
+
+  .bar{display:flex;flex-wrap:wrap;align-items:stretch;border-bottom:1px solid var(--line)}
+  .bar>*{border-left:1px solid var(--line)}
+  .bar>*:first-child{border-left:none}
+  .bar input,.bar select{border:none;background:transparent;font:inherit;font-size:13px;padding:13px 14px;outline:none;color:var(--ink)}
+  .bar input#search{flex:1;min-width:160px}
+  .bar input::placeholder{color:var(--soft)}
+  .bar .grow{flex:1}
+  .btn{border:none;background:transparent;font-family:"Geist Mono","Geist",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:13px 18px;cursor:pointer;color:var(--ink);white-space:nowrap}
+  .btn:hover{background:var(--ink);color:var(--paper)}
+  .btn.solid{background:var(--ink);color:var(--paper)}
+  .btn.solid:hover{background:#333}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:12px 12px;border-bottom:1px solid var(--hair);border-left:1px solid var(--hair);vertical-align:middle}
+  th:first-child,td:first-child{border-left:none}
+  thead th{font-family:"Geist Mono","Geist",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);font-weight:500;cursor:pointer;user-select:none;border-bottom:1px solid var(--line);background:var(--paper)}
+  thead th:hover{color:var(--ink)}
+  tbody tr:hover{background:#efeee8}
+  .thumb{width:62px;height:42px;border:1px solid var(--line);object-fit:cover;display:block;background:#e9e8e2}
+  td.nm{font-size:16px;line-height:1.15;min-width:170px;font-weight:500}
+  td.nm a{text-decoration:none;border-bottom:1px solid transparent}
+  td.nm a:hover{border-bottom-color:var(--ink)}
+  td.nm .spec{display:block;font-size:11px;color:var(--soft);margin-top:3px;font-weight:400}
+  .price{font-family:"Geist Mono","Geist",monospace;font-weight:600;white-space:nowrap}
+  .mono{font-family:"Geist Mono","Geist",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rkcell{font-family:"Geist Mono","Geist",monospace;font-size:18px;text-align:center;width:42px}
+  .rkcell.medal{background:var(--ink);color:var(--paper)}
+  .scorepill{display:inline-block;min-width:38px;text-align:center;border:1px solid var(--ink);padding:3px 8px;font-family:"Geist Mono","Geist",monospace;font-weight:500;font-variant-numeric:tabular-nums}
+  .scorepill.g{background:var(--green);border-color:var(--green);color:#fff}
+  .scorepill.o{background:var(--orange);border-color:var(--orange);color:#fff}
+  .scorepill.r{background:var(--red);border-color:var(--red);color:#fff}
+  select.cell{border:1px solid var(--hair);background:var(--paper);font:inherit;font-size:12px;padding:5px 6px;cursor:pointer}
+  .dot{display:inline-block;width:8px;height:8px;margin-right:6px;vertical-align:middle}
+  .act{display:flex;gap:4px}
+  .ibtn{border:1px solid var(--hair);background:transparent;font-family:"Geist Mono","Geist",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:6px 9px;cursor:pointer}
+  .ibtn:hover{background:var(--ink);color:var(--paper)}
+
+  .note{font-size:12px;color:var(--soft);line-height:1.7}
+  .note b{color:var(--ink)}
+
+  .overlay{position:fixed;inset:0;background:rgba(14,14,14,.55);display:none;align-items:flex-start;justify-content:center;z-index:1000;overflow-y:auto;padding:36px 14px}
+  .overlay.open{display:flex}
+  .modal{background:var(--paper);border:1px solid var(--line);max-width:720px;width:100%}
+  .modal .mh{display:flex;justify-content:space-between;align-items:baseline;padding:18px 22px;border-bottom:1px solid var(--line)}
+  .modal .mh h3{font-size:26px;font-weight:800}
+  .modal .mb{padding:22px}
+  .paste{display:flex;border:1px solid var(--line);margin-bottom:8px}
+  .paste input{flex:1;border:none;background:transparent;font:inherit;font-size:13px;padding:11px 12px;outline:none}
+  .paste .btn{border-left:1px solid var(--line)}
+  .status{font-size:12px;min-height:16px;margin-bottom:16px;color:#222}
+  .grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line)}
+  .field{display:flex;flex-direction:column;border-left:1px solid var(--hair);border-top:1px solid var(--hair)}
+  .field:nth-child(odd){border-left:none}
+  .field.full{grid-column:1/-1}
+  .field label{font-family:"Geist Mono","Geist",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);padding:8px 10px 0}
+  .field input{border:none;background:transparent;font:inherit;font-size:13px;padding:4px 10px 9px;outline:none}
+  .prev{margin-top:14px;border:1px solid var(--hair);height:150px;background:#e9e8e2;display:none;overflow:hidden}
+  .prev img{width:100%;height:100%;object-fit:cover}
+  .macts{display:flex;margin-top:20px;border:1px solid var(--line)}
+  .macts .btn{flex:1;border-left:1px solid var(--line)}
+  .macts .btn:first-child{border-left:none}
+  @media(max-width:780px){.grid{grid-template-columns:1fr}.field{border-left:none}}
+
+  @media(max-width:920px){
+    .stats{grid-template-columns:1fr 1fr}.stats>div:nth-child(3),.stats>div:nth-child(4){border-top:1px solid var(--line)}.stats>div:nth-child(3){border-left:none}
+    .top3{grid-template-columns:1fr}.top3>article{border-left:none;border-top:1px solid var(--line)}.top3>article:first-child{border-top:none}
+    table,thead,tbody,th,td,tr{display:block}thead{display:none}
+    tbody tr{border-bottom:1px solid var(--line);padding:6px 4px}
+    td{border:none;padding:6px 10px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+    td::before{content:attr(data-l);font-family:"Geist Mono","Geist",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+    td.nm{display:block}.thumb{width:100%;height:160px}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="pad">
+    <div class="mast">
+      <h1 class="display">Coches<br>candidatos</h1>
+      <div class="meta">
+        <div class="label">Selección · primer coche · Madrid</div>
+        <div class="big display" id="dateline"></div>
+      </div>
+    </div>
+    <p class="tagline">Ranking automático orientativo que pondera precio, fiabilidad de marca y modelo, tipo de motor, kilómetros, año, potencia adecuada para un primer coche y cercanía a Madrid. El listado vive en coches.json: puedes cambiar estilos sin perderlo.</p>
+  </div>
+
+  <div class="stats row-line" id="stats"></div>
+
+  <div class="pad row-line">
+    <div class="sec-h"><h2 class="display">Selección recomendada</h2><span class="label">Top 3 por puntuación</span></div>
+  </div>
+  <div class="top3 row-line" id="top3"></div>
+
+  <div class="bar row-line">
+    <input type="text" id="search" placeholder="Buscar marca, modelo, ciudad…">
+    <select id="fEstado" class="btn" style="text-transform:none;letter-spacing:0"></select>
+    <select id="fRec" class="btn" style="text-transform:none;letter-spacing:0"></select>
+    <span class="grow"></span>
+    <button class="btn solid" onclick="openModal()">+ Añadir coche</button>
+    <button class="btn" onclick="exportJSON()">JSON</button>
+    <button class="btn" onclick="exportCSV()">CSV</button>
+    <button class="btn" onclick="resetAll()">Reset</button>
+  </div>
+
+  <div style="overflow-x:auto">
+  <table>
+    <thead><tr>
+      <th data-k="rank">#</th>
+      <th>Foto</th>
+      <th data-k="coche">Coche</th>
+      <th data-k="concesionario">Origen</th>
+      <th data-k="cv">CV</th>
+      <th data-k="km">Km</th>
+      <th data-k="precio">Precio</th>
+      <th data-k="anio">Año</th>
+      <th data-k="score">Score</th>
+      <th data-k="estado">Estado</th>
+      <th data-k="rec">¿Recom.?</th>
+      <th></th>
+    </tr></thead>
+    <tbody id="body"></tbody>
+  </table>
+  </div>
+
+  <div class="pad row-line">
+    <p class="note">
+      <span id="fontUsed"></span>
+      <b>SCORE (0–100):</b> motor 17% · precio 16% · fiabilidad marca/modelo 16% · año 15% · cercanía a Madrid 13% · kilómetros 12% · potencia adecuada 11%. Es una guía, no una verdad absoluta: pasa el ratón por el score para ver el porqué.<br>
+      <b>AÑADIR / EDITAR:</b> “+ Añadir coche”, pega el enlace (OcasionPlus, Autohero…) y Extraer; saca nombre, precio, km, año, CV, ciudad e imagen. Edita cualquier fila con su botón.<br>
+      <b>PERSISTENCIA EN GITHUB:</b> el catálogo está en <b>coches.json</b> (separado del diseño). Cambia estilos en index.html y súbelos: el listado se mantiene. Para actualizar el catálogo publicado, pulsa <b>JSON</b>, sustituye coches.json en el repo y haz push.
+    </p>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="mh"><h3 class="display" id="modalTitle">Añadir coche</h3><span class="label" id="modalSub">Pega un enlace o rellena a mano</span></div>
+    <div class="mb">
+      <div class="paste">
+        <input type="text" id="urlInput" placeholder="https://www.ocasionplus.com/…  ·  https://www.autohero.com/…">
+        <button class="btn solid" onclick="extract()">Extraer</button>
+      </div>
+      <div class="status" id="status"></div>
+      <div class="grid">
+        <div class="field full"><label>Coche (marca + modelo + versión)</label><input id="f_coche"></div>
+        <div class="field full"><label>Concesionario / origen (ciudad)</label><input id="f_conc"></div>
+        <div class="field"><label>Potencia (CV)</label><input id="f_cv" type="number"></div>
+        <div class="field"><label>Kilometraje</label><input id="f_km" type="number"></div>
+        <div class="field"><label>Precio (€)</label><input id="f_precio" type="number"></div>
+        <div class="field"><label>Año</label><input id="f_anio" type="number"></div>
+        <div class="field"><label>Combustible</label><input id="f_comb" placeholder="Gasolina / Diésel…"></div>
+        <div class="field"><label>Cambio</label><input id="f_cambio" placeholder="Manual / Automático"></div>
+        <div class="field full"><label>Enlace del anuncio</label><input id="f_url"></div>
+        <div class="field full"><label>Imagen (URL)</label><input id="f_img" placeholder="https://…jpg"></div>
+      </div>
+      <div class="prev" id="prev"><img id="prevImg" alt=""></div>
+      <div class="macts">
+        <button class="btn" onclick="closeModal()">Cancelar</button>
+        <button class="btn solid" onclick="saveCar()">Guardar coche</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ESTADOS=["Por ver","Contactado","Cita pedida","Visto","Reservado","Descartado"];
+const RECS=["Pendiente","Sí","No","Depende"];
+const colorRec={"Sí":"var(--green)","No":"var(--red)","Depende":"var(--amber)","Pendiente":"#bdbcb5"};
+const colorEstado={"Por ver":"#bdbcb5","Contactado":"#3b5bdb","Cita pedida":"var(--amber)","Visto":"#0e0e0e","Reservado":"var(--green)","Descartado":"var(--red)"};
+const noacc=s=>(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"");
+const SCOLOR={g:"var(--green)",o:"var(--orange)",r:"var(--red)"};
+const scoreClass=s=>s>=70?"g":s>=55?"o":"r";
+
+// Catálogo embebido (fallback al abrir en local). La fuente real es coches.json.
+const SEED=[
+ {id:"c1",coche:"Seat Ibiza 1.0 EcoTSI FR Crono",concesionario:"OcasionPlus Madrid (Móstoles)",cv:110,km:84644,precio:11200,anio:2017,comb:"Gasolina",cambio:"Manual",url:"https://www.ocasionplus.com/coches-segunda-mano/seat-ibiza-10-ecotsi-fr-crono-con-84644km-2017-ucic9qaf",img:"https://img.ocasionplus.com/wbnh_VNy31LYvCulPwEIoMoeMYlMhiJskZQTAS-k1yY/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTYvMDIvOTAvOTAvMS94MDEuanBnPzE1MTk0NTg2NTU2"},
+ {id:"c2",coche:"Hyundai i20 1.2 MPI Klass",concesionario:"OcasionPlus Zaragoza (Camino Enmedio)",cv:84,km:70552,precio:10300,anio:2017,comb:"Gasolina",cambio:"Manual",url:"https://www.ocasionplus.com/coches-segunda-mano/hyundai-i20-12-mpi-klass-con-70552km-2017-u7mtxqan",img:"https://img.ocasionplus.com/8B48FDQ2ca5hhpfa7zzogrJMfcZjqbRe0DTzlqq2LCE/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvNjkvODUvNzUvNi94MDEuanBnPzE1MTkyMjk4ODMx"},
+ {id:"c3",coche:"Seat Ibiza 1.2 TSI Style",concesionario:"OcasionPlus Madrid (Getafe)",cv:105,km:84233,precio:8200,anio:2013,comb:"Gasolina",cambio:"Manual",url:"https://www.ocasionplus.com/coches-segunda-mano/seat-ibiza-12-tsi-style-con-84233km-2013-tm8fxqal",img:"https://img.ocasionplus.com/2OkVquDPlw-pcOpGNA6XXr6granXw4gyWJY0harzzK4/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvMTgvNTkvMjEvNC94MDEuanBnPzE1MTc1Nzg4Mjkx"},
+ {id:"c4",coche:"Seat Ibiza 1.2 TSI Style Connect Blue",concesionario:"OcasionPlus Barcelona (Maquinista)",cv:90,km:72300,precio:11200,anio:2017,comb:"Gasolina",cambio:"Manual",url:"https://www.ocasionplus.com/coches-segunda-mano/seat-ibiza-12-tsi-66kw-90cv-style-connect-blue-con-72300km-2017-to39hqat",img:"https://img.ocasionplus.com/NP3hNJufipJmwpT37f7DXMBcEjxKnxMc_uwW2pWd-ak/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvMjYvMDIvMTEvMy94MDEuanBnPzE1MTc2MDMyNDU4"},
+ {id:"c5",coche:"Toyota Yaris 100 Active",concesionario:"OcasionPlus Madrid (Torrejón de Ardoz)",cv:99,km:88355,precio:9290,anio:2014,comb:"Gasolina",cambio:"Manual",url:"https://www.ocasionplus.com/coches-segunda-mano/toyota-yaris-100-active-con-88355km-2014-uraulqa1",img:"https://img.ocasionplus.com/mxq9L5ItUHdwzGxj-Wp9raGQxAaeKX9fzcMVgAim6No/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvOTAvNzgvMjMvNS94MDEuanBnPzE1MTk0NTI5OTEz"},
+ {id:"c6",coche:"Peugeot 208 PureTech 100 Allure",concesionario:"OcasionPlus Córdoba",cv:100,km:52021,precio:11500,anio:2022,comb:"Gasolina",cambio:"Manual",url:"https://www.ocasionplus.com/coches-segunda-mano/peugeot-208-puretech-100-allure-con-52021km-2022-uxeuaqax",img:"https://img.ocasionplus.com/sXluE5pMAlERvvlsasKnJSxXJjcSf-H79FG3cxSNz80/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvOTgvODMvMDMvMC94MDEuanBnPzE1MTkzMTUzMDk2"},
+ {id:"c7",coche:"Opel Corsa 1.2 Turbo XHL GS-Line",concesionario:"OcasionPlus Vizcaya",cv:100,km:35641,precio:11900,anio:2019,comb:"Gasolina",cambio:"Manual",url:"https://www.ocasionplus.com/coches-segunda-mano/opel-corsa-12-turbo-xhl-gsline-con-35641km-2019-ugslrqax",img:"https://img.ocasionplus.com/yT-PYfI4Lk7dOyB-eUu424qfNphHiYvvpNtDPKWyW9k/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvNzgvMjMvOTUvOS94MDEuanBnPzE1MTg4Mjc3ODM4"},
+ {id:"c8",coche:"Ford Ka+ 1.2 Ti-VCT White Edition",concesionario:"OcasionPlus Ourense",cv:85,km:64387,precio:9990,anio:2019,comb:"Gasolina",cambio:"Manual",url:"https://www.ocasionplus.com/coches-segunda-mano/ford-ka-12-tivct-white-edition-con-64387km-2019-uodwcqad",img:"https://img.ocasionplus.com/R2LBSe8IQ6MN0RulPiDbmag04QygdDXUEUULrkE5HL4/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvODUvMDgvMzIvNS94MDEuanBnPzE1MTkyMTQwNzU1"},
+];
+
+const SKEY="coches_state_v4";
+let st=loadState();        // {ov:{id:{estado,rec}}, add:[...], del:[...], ed:{id:{...}}}
+let CATALOG=SEED.slice();  // se reemplaza por coches.json si está disponible
+let cars=[];
+let sortK="score",sortAsc=false,search="",fEstado="",fRec="",editingId=null;
+
+function loadState(){try{const d=JSON.parse(localStorage.getItem(SKEY));if(d&&d.ov)return d}catch(e){}return {ov:{},add:[],del:[],ed:{}}}
+function saveState(){localStorage.setItem(SKEY,JSON.stringify(st))}
+const fmt=n=>Number(n||0).toLocaleString("es-ES");
+const uid=()=>"u"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const $=id=>document.getElementById(id);
+$("dateline").textContent=new Date().toLocaleDateString("es-ES",{day:"2-digit",month:"long",year:"numeric"});
+
+function rebuild(){
+  cars=CATALOG.filter(c=>!st.del.includes(c.id)).map(c=>({...c,...(st.ed[c.id]||{})}));
+  cars=cars.concat(st.add.filter(c=>!st.del.includes(c.id)));
+  cars.forEach(c=>{const o=st.ov[c.id]||{};c.estado=o.estado||"Por ver";c.rec=o.rec||"Pendiente";});
+}
+const find=id=>cars.find(c=>c.id===id);
+const inCatalog=id=>CATALOG.some(c=>c.id===id);
+
+/* Scoring */
+function brandRel(coche){
+  const s=(coche||"").toLowerCase();
+  const models={i20:.9,i10:.9,i30:.88,yaris:.93,aygo:.85,corolla:.95,ibiza:.8,leon:.8,arona:.8,polo:.84,golf:.8,fabia:.86,corsa:.7,astra:.69,clio:.73,captur:.7,"208":.7,"2008":.7,fiesta:.8,focus:.76,"500":.66,panda:.66,micra:.74,sandero:.82,duster:.8,swift:.9,picanto:.86,rio:.86};
+  for(const m in models) if(new RegExp("\\b"+m+"\\b").test(s)) return models[m];
+  const brands={lexus:.97,toyota:.95,honda:.92,mazda:.9,suzuki:.89,hyundai:.9,kia:.88,subaru:.85,dacia:.82,volvo:.82,skoda:.85,seat:.79,volkswagen:.79,nissan:.8,ford:.75,audi:.75,mini:.7,bmw:.74,mercedes:.74,peugeot:.7,renault:.7,opel:.69,"citroën":.68,citroen:.68,fiat:.6,alfa:.58};
+  for(const b in brands) if(s.includes(b)) return brands[b];
+  return .72;
+}
+function engineRel(coche,anio){
+  const s=(coche||"").toLowerCase();
+  if(/(tdi|dci|hdi|cdti|crdi|bluehdi|d4d|d-4d|diesel|diésel)/.test(s)) return {v:.77,note:"Diésel: menos ideal para ciudad y zonas de bajas emisiones",bad:true};
+  if(/(mpi|mpfi|atmosf|\b16v\b|\bvvt\b|\bvti\b|vct|ti-vct|dual\s?vvt)/.test(s) && !/(tsi|tfsi|turbo|tce|thp|ecoboost|tgdi|t-gdi|puretech)/.test(s)) return {v:.9,note:"Motor atmosférico: mecánica simple y muy fiable",good:true};
+  if(/1\.?2\s*tsi/.test(s) && anio && anio<=2014) return {v:.45,note:"1.2 TSI antiguo (EA111): cadena de distribución y consumo de aceite reportados",bad:true};
+  if(/puretech/.test(s)) return {v:.7,note:"PureTech 1.2: vigilar la correa de distribución en aceite",bad:true};
+  if(/(ecotsi|tsi|tfsi|tce|thp|ecoboost|tgdi|t-gdi|dig-?t|turbo)/.test(s)) return {v:.8,note:"Turbo gasolina moderno"};
+  return {v:.76,note:""};
+}
+function powerScore(cv){ if(!cv)return .6; if(cv>=75&&cv<=115)return 1; if(cv<75)return clamp(.85-(75-cv)*.012,.5,.85); if(cv<=140)return .78; if(cv<=180)return .52; return .32; }
+function locScore(text){ const s=(text||"").toLowerCase();
+  if(/madrid/.test(s))return 1;
+  if(/(toledo|guadalajara|segovia|ávila|avila|cuenca)/.test(s))return .72;
+  if(/(barcelona|valencia|zaragoza|sevilla|bilbao|vizcaya|málaga|malaga|murcia|coru|vigo|ourense|córdoba|cordoba|santander|alicante)/.test(s))return .42;
+  if(!s.trim())return .6; return .55;
+}
+function scoreCar(c,ctx){
+  const cv=+c.cv||0,anio=+c.anio||0,km=+c.km||0,precio=+c.precio||0;
+  const ps = precio>0 && ctx.maxP>ctx.minP ? 1-(precio-ctx.minP)/(ctx.maxP-ctx.minP) : .65;
+  const ks = km>0 && ctx.maxK>ctx.minK ? 1-(km-ctx.minK)/(ctx.maxK-ctx.minK) : .65;
+  const ys = anio? clamp((anio-2008)/12,0,1):.5;
+  const pw = powerScore(cv), br = brandRel(c.coche), en = engineRel(c.coche,anio);
+  const lo = locScore((c.concesionario||"")+" "+(c.url||""));
+  const total = ps*.16+ks*.12+ys*.15+pw*.11+br*.16+en.v*.17+lo*.13;
+  const pros=[],cons=[];
+  if(ps>=.7)pros.push("Precio competitivo"); else if(ps<=.3)cons.push("De los más caros de la lista");
+  if(br>=.88)pros.push("Marca muy fiable"); else if(br<.7)cons.push("Marca con fiabilidad media");
+  if(en.good)pros.push(en.note); if(en.bad)cons.push(en.note);
+  if(ks>=.7)pros.push("Kilometraje bajo"); else if(ks<=.3)cons.push("Kilometraje alto");
+  if(anio>=2017)pros.push("Matriculación reciente"); else if(anio&&anio<=2013)cons.push("Modelo antiguo");
+  if(pw>=1)pros.push("Potencia ideal para primer coche"); else if(cv>140)cons.push("Bastante potente: seguro más caro");
+  if(lo>=1)pros.push("En Madrid, sin traslado"); else if(lo<=.45)cons.push("Fuera de Madrid: habría que traerlo");
+  return {score:Math.round(total*100),pros,cons};
+}
+function scoreAll(){
+  const pr=cars.map(c=>+c.precio).filter(n=>n>0),km=cars.map(c=>+c.km).filter(n=>n>0);
+  const ctx={minP:Math.min(...pr),maxP:Math.max(...pr),minK:Math.min(...km),maxK:Math.max(...km)};
+  cars.forEach(c=>{const r=scoreCar(c,ctx);c.score=r.score;c.pros=r.pros;c.cons=r.cons;});
+  [...cars].sort((a,b)=>b.score-a.score).forEach((c,i)=>c.rank=i+1);
+}
+
+/* Render */
+function fillSelect(el,arr,all){el.innerHTML='<option value="">'+all+'</option>'+arr.map(v=>`<option>${v}</option>`).join("")}
+fillSelect($("fEstado"),ESTADOS,"Estado: todos");
+fillSelect($("fRec"),RECS,"Recom.: todas");
+
+function rowList(){
+  let r=cars.slice();
+  if(search){const s=search.toLowerCase();r=r.filter(c=>((c.coche||"")+(c.concesionario||"")).toLowerCase().includes(s))}
+  if(fEstado)r=r.filter(c=>c.estado===fEstado);
+  if(fRec)r=r.filter(c=>c.rec===fRec);
+  r.sort((a,b)=>{let x=a[sortK],y=b[sortK];if(typeof x==="string"){x=(x||"").toLowerCase();y=(y||"").toLowerCase()}return (x>y?1:x<y?-1:0)*(sortAsc?1:-1)});
+  return r;
+}
+const imgTag=(src,cls)=>src?`<img class="${cls}" src="${src}" alt="" onerror="this.style.visibility='hidden'">`:`<div class="${cls}"></div>`;
+
+function renderTop(){
+  const top=[...cars].sort((a,b)=>a.rank-b.rank).slice(0,3);
+  $("top3").innerHTML=top.map(c=>{
+    const cl=scoreClass(c.score);
+    const pros=(c.pros||[]).slice(0,3).map(p=>`<li>${p}</li>`).join("");
+    const cons=(c.cons||[]).slice(0,1).map(p=>`<li class="bad">${p}</li>`).join("");
+    return `<article>
+      <div class="ph"><span class="rk display" style="background:${SCOLOR[cl]}">${String(c.rank).padStart(2,"0")}</span>${imgTag(c.img,"")}</div>
+      <div class="body">
+        <div class="nm display">${c.coche}</div>
+        <div class="scoreline"><span class="sc display" style="color:${SCOLOR[cl]}">${c.score}</span><span class="pr">${c.precio?fmt(c.precio)+" €":"—"}</span></div>
+        <ul>${pros}${cons}</ul>
+        <div class="lks">${c.url?`<a href="${c.url}" target="_blank">Ver anuncio</a>`:""}<a href="#" onclick="openModal('${c.id}');return false">Editar</a></div>
+      </div></article>`;
+  }).join("");
+}
+function renderStats(){
+  const rec=cars.filter(c=>c.rec==="Sí").length;
+  const pr=cars.map(c=>+c.precio).filter(n=>n>0);
+  const best=cars.reduce((m,c)=>c.score>(m?m.score:-1)?c:m,null);
+  $("stats").innerHTML=`
+    <div><div class="label">Candidatos</div><div class="n display">${cars.length}</div></div>
+    <div><div class="label">Recomendados</div><div class="n display">${rec}</div></div>
+    <div><div class="label">Rango precio €</div><div class="n display">${pr.length?fmt(Math.min(...pr))+"–"+fmt(Math.max(...pr)):"—"}</div></div>
+    <div><div class="label">Mejor score</div><div class="n display">${best?best.score:"—"}</div></div>`;
+}
+function render(){
+  scoreAll();renderStats();renderTop();
+  const b=$("body");b.innerHTML="";
+  rowList().forEach(c=>{
+    const tier=scoreClass(c.score);
+    const medal=c.rank<=3?"medal":"";
+    const why=[...(c.pros||[]).map(p=>"+ "+p),...(c.cons||[]).map(p=>"– "+p)].join("\n");
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td class="rkcell ${medal}" data-l="#">${c.rank}</td>
+      <td data-l="Foto">${imgTag(c.img,"thumb")}</td>
+      <td class="nm" data-l="Coche">${c.url?`<a href="${c.url}" target="_blank">${c.coche}</a>`:c.coche}<span class="spec">${[c.comb,c.cambio].filter(Boolean).join(" · ")}</span></td>
+      <td data-l="Origen">${c.concesionario||"—"}</td>
+      <td class="mono" data-l="CV">${c.cv||"—"}</td>
+      <td class="mono" data-l="Km">${c.km?fmt(c.km):"—"}</td>
+      <td class="price" data-l="Precio">${c.precio?fmt(c.precio)+" €":"—"}</td>
+      <td class="mono" data-l="Año">${c.anio||"—"}</td>
+      <td data-l="Score"><span class="scorepill ${tier}" title="${why}">${c.score}</span></td>
+      <td data-l="Estado"><span class="dot" style="background:${colorEstado[c.estado]}"></span><select class="cell estado" data-id="${c.id}">${ESTADOS.map(e=>`<option ${e===c.estado?"selected":""}>${e}</option>`).join("")}</select></td>
+      <td data-l="¿Recom.?"><span class="dot" style="background:${colorRec[c.rec]}"></span><select class="cell rec" data-id="${c.id}">${RECS.map(e=>`<option ${e===c.rec?"selected":""}>${e}</option>`).join("")}</select></td>
+      <td data-l=""><div class="act"><button class="ibtn" data-ed="${c.id}">Editar</button><button class="ibtn" data-del="${c.id}">×</button></div></td>`;
+    b.appendChild(tr);
+  });
+  b.querySelectorAll("select.estado").forEach(s=>s.onchange=e=>{setOv(e.target.dataset.id,"estado",e.target.value)});
+  b.querySelectorAll("select.rec").forEach(s=>s.onchange=e=>{setOv(e.target.dataset.id,"rec",e.target.value)});
+  b.querySelectorAll("[data-ed]").forEach(x=>x.onclick=e=>openModal(e.target.dataset.ed));
+  b.querySelectorAll("[data-del]").forEach(x=>x.onclick=e=>delCar(e.target.dataset.del));
+}
+function setOv(id,k,v){st.ov[id]=Object.assign({},st.ov[id],{[k]:v});saveState();rebuild();render();}
+function delCar(id){const c=find(id);if(!confirm("¿Eliminar "+c.coche+"?"))return;
+  if(inCatalog(id)){if(!st.del.includes(id))st.del.push(id);} else {st.add=st.add.filter(k=>k.id!==id);}
+  delete st.ov[id];delete st.ed[id];saveState();rebuild();render();}
+
+document.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortK===k)sortAsc=!sortAsc;else{sortK=k;sortAsc=(k==="coche"||k==="concesionario"||k==="rank")}render()});
+$("search").oninput=e=>{search=e.target.value;render()};
+$("fEstado").onchange=e=>{fEstado=e.target.value;render()};
+$("fRec").onchange=e=>{fRec=e.target.value;render()};
+
+/* Add / Edit */
+const F=["urlInput","f_coche","f_conc","f_cv","f_km","f_precio","f_anio","f_comb","f_cambio","f_url","f_img"];
+function openModal(id){
+  editingId=id||null;
+  F.forEach(x=>$(x).value="");$("status").textContent="";$("prev").style.display="none";
+  if(editingId){
+    const c=find(editingId);
+    $("modalTitle").textContent="Editar coche";$("modalSub").textContent=c.coche;
+    $("f_coche").value=c.coche||"";$("f_conc").value=c.concesionario||"";$("f_cv").value=c.cv||"";
+    $("f_km").value=c.km||"";$("f_precio").value=c.precio||"";$("f_anio").value=c.anio||"";
+    $("f_comb").value=c.comb||"";$("f_cambio").value=c.cambio||"";$("f_url").value=c.url||"";$("f_img").value=c.img||"";
+    if(c.img){$("prevImg").src=c.img;$("prev").style.display="block";}
+  }else{$("modalTitle").textContent="Añadir coche";$("modalSub").textContent="Pega un enlace o rellena a mano";}
+  $("overlay").classList.add("open");(editingId?$("f_coche"):$("urlInput")).focus();
+}
+function closeModal(){$("overlay").classList.remove("open")}
+$("overlay").onclick=e=>{if(e.target.id==="overlay")closeModal()};
+$("f_img").oninput=e=>{const v=e.target.value.trim();if(v){$("prevImg").src=v;$("prev").style.display="block"}else $("prev").style.display="none"};
+
+const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+function prettyName(slug){const t=slug.split("-").filter(Boolean).map(x=>/^\d{2}$/.test(x)?x[0]+"."+x[1]:x);if(t[0])t[0]=cap(t[0]);if(t[1])t[1]=cap(t[1]);return t.map((x,i)=>i<2?x:(/^[a-z]/.test(x)?cap(x):x)).join(" ");}
+function parseSlug(url){const out={};try{
+  const seg=decodeURIComponent(new URL(url).pathname.split("/").filter(Boolean).pop()||"");
+  const m=seg.match(/^(.*?)-con-(\d+)km-(\d{4})-[a-z0-9]+$/i)||seg.match(/^(.*?)-(\d+)km-(\d{4})/i);
+  if(m){out.coche=prettyName(m[1]);out.km=+m[2];out.anio=+m[3];}
+  const cv=seg.match(/(\d{2,3})cv/i);if(cv)out.cv=+cv[1];
+}catch(e){}return out;}
+function parseMeta(text){
+  const out={};
+  const m=text.match(/([^\n\r<>"]{3,80}?)\s*\((\d{2,3})\s*CV\)\s*-\s*([\d.,]+)\s*€\s*en\s+([A-Za-zÀ-ÿ.\- ]{2,30})/i);
+  if(m){out.coche=m[1].replace(/\s+/g," ").trim();out.cv=+m[2];out.precio=+m[3].replace(/[.,]/g,"");out.ciudad=m[4].trim();}
+  const t=text.match(/og:title["\s:]+content="([^"]+)"/i)||text.match(/og:title:\s*(.+)/i)||text.match(/<title>([^<]+)<\/title>/i);
+  if(t&&!out.coche)out.coche=t[1].replace(/\s+/g," ").trim().slice(0,80);
+  const im=text.match(/og:image["\s:]+content="([^"]+)"/i)||text.match(/og:image:\s*(\S+)/i);
+  if(im)out.img=im[1].replace(/&amp;/g,"&");
+  if(!out.precio){const p=text.match(/(\d{1,3}[.\s]?\d{3})\s*€/);if(p)out.precio=+p[1].replace(/[.\s]/g,"");}
+  if(!out.km){const k=text.match(/(\d{1,3}[.\s]?\d{3})\s*km/i);if(k)out.km=+k[1].replace(/[.\s]/g,"");}
+  if(!out.anio){const y=text.match(/\b(20[0-2]\d)\b/);if(y)out.anio=+y[1];}
+  if(!out.cv){const c=text.match(/(\d{2,3})\s*(?:cv|hp)\b/i);if(c)out.cv=+c[1];}
+  return Object.keys(out).length?out:null;
+}
+async function tryProxies(url){
+  const proxies=[u=>"https://api.allorigins.win/raw?url="+encodeURIComponent(u),u=>"https://r.jina.ai/"+u];
+  for(const p of proxies){try{
+    const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),10000);
+    const r=await fetch(p(url),{signal:ctl.signal});clearTimeout(to);
+    if(!r.ok)continue;const meta=parseMeta(await r.text());if(meta)return meta;
+  }catch(e){}}return null;
+}
+async function extract(){
+  const url=$("urlInput").value.trim();const stx=$("status");
+  if(!url){stx.textContent="Pega un enlace primero.";return}
+  $("f_url").value=url;
+  const s=parseSlug(url);
+  if(s.coche)$("f_coche").value=s.coche; if(s.km)$("f_km").value=s.km; if(s.anio)$("f_anio").value=s.anio; if(s.cv)$("f_cv").value=s.cv;
+  $("f_comb").value=$("f_comb").value||"Gasolina";$("f_cambio").value=$("f_cambio").value||"Manual";
+  stx.textContent="Leyendo la ficha (nombre, precio, ciudad e imagen)…";
+  const meta=await tryProxies(url);
+  if(meta){
+    if(meta.coche)$("f_coche").value=meta.coche;
+    if(meta.cv)$("f_cv").value=meta.cv;
+    if(meta.precio)$("f_precio").value=meta.precio;
+    if(meta.km&&!$("f_km").value)$("f_km").value=meta.km;
+    if(meta.anio&&!$("f_anio").value)$("f_anio").value=meta.anio;
+    if(meta.ciudad){const op=/ocasionplus/i.test(url);$("f_conc").value=(op?"OcasionPlus ":"")+meta.ciudad;}
+    if(meta.img){$("f_img").value=meta.img;$("prevImg").src=meta.img;$("prev").style.display="block";}
+    stx.textContent="✓ Ficha leída. Revisa y guarda.";
+  }else stx.textContent="No se pudo leer la ficha (el navegador bloquea webs externas). Completa precio, ciudad e imagen a mano.";
+}
+function saveCar(){
+  const coche=$("f_coche").value.trim();
+  if(!coche){$("status").textContent="Pon al menos el nombre del coche.";return}
+  const data={coche,
+    concesionario:$("f_conc").value.trim(),cv:+$("f_cv").value||"",km:+$("f_km").value||"",
+    precio:+$("f_precio").value||"",anio:+$("f_anio").value||"",comb:$("f_comb").value.trim(),
+    cambio:$("f_cambio").value.trim(),url:$("f_url").value.trim(),img:$("f_img").value.trim()};
+  if(editingId){
+    if(inCatalog(editingId)){st.ed[editingId]=Object.assign({},st.ed[editingId],data);}
+    else{const c=st.add.find(k=>k.id===editingId);if(c)Object.assign(c,data);}
+  }else{st.add.push({id:uid(),...data});}
+  saveState();rebuild();render();closeModal();
+}
+
+function catalogNow(){ // catálogo (sin feedback) para publicar
+  const base=CATALOG.filter(c=>!st.del.includes(c.id)).map(c=>({...c,...(st.ed[c.id]||{})}));
+  const add=st.add.filter(c=>!st.del.includes(c.id)).map(c=>{const{estado,rec,score,rank,pros,cons,...rest}=c;return rest;});
+  return base.concat(add);
+}
+function exportJSON(){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(catalogNow(),null,1)],{type:"application/json"}));
+  a.download="coches.json";a.click();
+}
+function exportCSV(){
+  const h=["Rank","Score","Coche","Origen","CV","Km","Precio","Año","Combustible","Cambio","Estado","Recomendado","Anuncio"];
+  const lines=[h.join(";")];
+  [...cars].sort((a,b)=>a.rank-b.rank).forEach(c=>lines.push([c.rank,c.score,c.coche,c.concesionario,c.cv,c.km,c.precio,c.anio,c.comb,c.cambio,c.estado,c.rec,c.url].join(";")));
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+lines.join("\n")],{type:"text/csv"}));a.download="coches_candidatos.csv";a.click();
+}
+function resetAll(){if(confirm("¿Restaurar el catálogo original y borrar tus estados, ediciones y altas?")){st={ov:{},add:[],del:[],ed:{}};saveState();rebuild();render()}}
+
+async function loadCatalog(){
+  try{const r=await fetch("coches.json",{cache:"no-store"});if(r.ok){const d=await r.json();if(Array.isArray(d)&&d.length)CATALOG=d;}}catch(e){}
+  rebuild();render();
+}
+document.addEventListener("DOMContentLoaded",function(){var el=$("fontUsed");if(el)el.innerHTML="";});
+rebuild();render();        // pinta ya con el catálogo embebido
+loadCatalog();             // y refresca desde coches.json si está publicado
+</script>
+</body>
+</html>
