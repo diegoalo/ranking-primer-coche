@@ -762,6 +762,177 @@
   ]
  },
  {
+  "id": "umquofsyb3be",
+  "coche": "KIA Rio 1.2 CVVT Concept",
+  "concesionario": "OcasionPlus Pontevedra",
+  "cv": 85,
+  "km": 29804,
+  "precio": 9950,
+  "anio": 2014,
+  "comb": "Gasolina",
+  "cambio": "Manual",
+  "url": "https://www.ocasionplus.com/coches-segunda-mano/kia-rio-12-cvvt-concept-con-29804km-2014-u0yyzqab",
+  "img": "https://img.ocasionplus.com/8FprrKBXRZ1FCuRaYqHcsN1xViE2VmIvtxfsnKmdV9M/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvNjAvOTYvMDEvNi94MDEuanBnPzE1MTg0MjYxNzQ3",
+  "bd": [
+   {
+    "k": "Motor",
+    "v": 76,
+    "w": 17,
+    "p": 13
+   },
+   {
+    "k": "Precio",
+    "v": 54,
+    "w": 16,
+    "p": 9
+   },
+   {
+    "k": "Fiabilidad",
+    "v": 86,
+    "w": 16,
+    "p": 14
+   },
+   {
+    "k": "Año",
+    "v": 50,
+    "w": 15,
+    "p": 8
+   },
+   {
+    "k": "Madrid",
+    "v": 55,
+    "w": 13,
+    "p": 7
+   },
+   {
+    "k": "Kilómetros",
+    "v": 100,
+    "w": 12,
+    "p": 12
+   },
+   {
+    "k": "Potencia",
+    "v": 100,
+    "w": 11,
+    "p": 11
+   }
+  ]
+ },
+ {
+  "id": "umquohlxf6ro",
+  "coche": "Hyundai i10 1.2 Go ! Plus",
+  "concesionario": "OcasionPlus Madrid",
+  "cv": 87,
+  "km": 77808,
+  "precio": 9450,
+  "anio": 2016,
+  "comb": "Gasolina",
+  "cambio": "Manual",
+  "url": "https://www.ocasionplus.com/coches-segunda-mano/hyundai-i10-12-go-plus-con-77808km-2016-svdd3qal",
+  "img": "https://img.ocasionplus.com/6zLDiQnu4QIZiYpA2rgBXqId_cdy4dssgcTH8HuYWyw/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTQvNDgvNzQvNDMvMS94MDEuanBnPzE1MTcxOTQ5Mzgw",
+  "bd": [
+   {
+    "k": "Motor",
+    "v": 76,
+    "w": 17,
+    "p": 13
+   },
+   {
+    "k": "Precio",
+    "v": 67,
+    "w": 16,
+    "p": 11
+   },
+   {
+    "k": "Fiabilidad",
+    "v": 90,
+    "w": 16,
+    "p": 14
+   },
+   {
+    "k": "Año",
+    "v": 67,
+    "w": 15,
+    "p": 10
+   },
+   {
+    "k": "Madrid",
+    "v": 100,
+    "w": 13,
+    "p": 13
+   },
+   {
+    "k": "Kilómetros",
+    "v": 27,
+    "w": 12,
+    "p": 3
+   },
+   {
+    "k": "Potencia",
+    "v": 100,
+    "w": 11,
+    "p": 11
+   }
+  ]
+ },
+ {
+  "id": "umquojv2mxx9",
+  "coche": "Nissan JUKE DIG-T N-Connecta 4x2",
+  "concesionario": "OcasionPlus Madrid",
+  "cv": 115,
+  "km": 55418,
+  "precio": 10800,
+  "anio": 2017,
+  "comb": "Gasolina",
+  "cambio": "Manual",
+  "url": "https://www.ocasionplus.com/coches-segunda-mano/nissan-juke-digt-nconnecta-4x2-con-55418km-2017-urkfhqah",
+  "img": "https://img.ocasionplus.com/CqJ1hUQ5qZU8sUrPj9Zel_ZK9JvXEDj2tmS0kEz6oJ8/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvOTAvNzgvNDkvMy94MDEuanBnPzE1MTkyNjI2MTc2",
+  "bd": [
+   {
+    "k": "Motor",
+    "v": 80,
+    "w": 17,
+    "p": 14
+   },
+   {
+    "k": "Precio",
+    "v": 32,
+    "w": 16,
+    "p": 5
+   },
+   {
+    "k": "Fiabilidad",
+    "v": 80,
+    "w": 16,
+    "p": 13
+   },
+   {
+    "k": "Año",
+    "v": 75,
+    "w": 15,
+    "p": 11
+   },
+   {
+    "k": "Madrid",
+    "v": 100,
+    "w": 13,
+    "p": 13
+   },
+   {
+    "k": "Kilómetros",
+    "v": 61,
+    "w": 12,
+    "p": 7
+   },
+   {
+    "k": "Potencia",
+    "v": 100,
+    "w": 11,
+    "p": 11
+   }
+  ]
+ },
+ {
   "id": "umquomx80fgc",
   "coche": "KIA Picanto 1.2 CVVT Eco-Dynamics x-Tech16",
   "concesionario": "OcasionPlus Gipuzkoa",
@@ -1034,9 +1205,9 @@
    },
    {
     "k": "Kilómetros",
-    "v": 47,
+    "v": 36,
     "w": 12,
-    "p": 6
+    "p": 4
    },
    {
     "k": "Potencia",
@@ -1091,9 +1262,180 @@
    },
    {
     "k": "Kilómetros",
-    "v": 44,
+    "v": 34,
     "w": 12,
+    "p": 4
+   },
+   {
+    "k": "Potencia",
+    "v": 100,
+    "w": 11,
+    "p": 11
+   }
+  ]
+ },
+ {
+  "id": "umquofsyb3be",
+  "coche": "KIA Rio 1.2 CVVT Concept",
+  "concesionario": "OcasionPlus Pontevedra",
+  "cv": 85,
+  "km": 29804,
+  "precio": 9950,
+  "anio": 2014,
+  "comb": "Gasolina",
+  "cambio": "Manual",
+  "url": "https://www.ocasionplus.com/coches-segunda-mano/kia-rio-12-cvvt-concept-con-29804km-2014-u0yyzqab",
+  "img": "https://img.ocasionplus.com/8FprrKBXRZ1FCuRaYqHcsN1xViE2VmIvtxfsnKmdV9M/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvNjAvOTYvMDEvNi94MDEuanBnPzE1MTg0MjYxNzQ3",
+  "bd": [
+   {
+    "k": "Motor",
+    "v": 76,
+    "w": 17,
+    "p": 13
+   },
+   {
+    "k": "Precio",
+    "v": 54,
+    "w": 16,
+    "p": 9
+   },
+   {
+    "k": "Fiabilidad",
+    "v": 86,
+    "w": 16,
+    "p": 14
+   },
+   {
+    "k": "Año",
+    "v": 50,
+    "w": 15,
+    "p": 8
+   },
+   {
+    "k": "Madrid",
+    "v": 55,
+    "w": 13,
+    "p": 7
+   },
+   {
+    "k": "Kilómetros",
+    "v": 77,
+    "w": 12,
+    "p": 9
+   },
+   {
+    "k": "Potencia",
+    "v": 100,
+    "w": 11,
+    "p": 11
+   }
+  ]
+ },
+ {
+  "id": "umquohlxf6ro",
+  "coche": "Hyundai i10 1.2 Go ! Plus",
+  "concesionario": "OcasionPlus Madrid",
+  "cv": 87,
+  "km": 77808,
+  "precio": 9450,
+  "anio": 2016,
+  "comb": "Gasolina",
+  "cambio": "Manual",
+  "url": "https://www.ocasionplus.com/coches-segunda-mano/hyundai-i10-12-go-plus-con-77808km-2016-svdd3qal",
+  "img": "https://img.ocasionplus.com/6zLDiQnu4QIZiYpA2rgBXqId_cdy4dssgcTH8HuYWyw/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTQvNDgvNzQvNDMvMS94MDEuanBnPzE1MTcxOTQ5Mzgw",
+  "bd": [
+   {
+    "k": "Motor",
+    "v": 76,
+    "w": 17,
+    "p": 13
+   },
+   {
+    "k": "Precio",
+    "v": 67,
+    "w": 16,
+    "p": 11
+   },
+   {
+    "k": "Fiabilidad",
+    "v": 90,
+    "w": 16,
+    "p": 14
+   },
+   {
+    "k": "Año",
+    "v": 67,
+    "w": 15,
+    "p": 10
+   },
+   {
+    "k": "Madrid",
+    "v": 100,
+    "w": 13,
+    "p": 13
+   },
+   {
+    "k": "Kilómetros",
+    "v": 21,
+    "w": 12,
+    "p": 3
+   },
+   {
+    "k": "Potencia",
+    "v": 100,
+    "w": 11,
+    "p": 11
+   }
+  ]
+ },
+ {
+  "id": "umquojv2mxx9",
+  "coche": "Nissan JUKE DIG-T N-Connecta 4x2",
+  "concesionario": "OcasionPlus Madrid",
+  "cv": 115,
+  "km": 55418,
+  "precio": 10800,
+  "anio": 2017,
+  "comb": "Gasolina",
+  "cambio": "Manual",
+  "url": "https://www.ocasionplus.com/coches-segunda-mano/nissan-juke-digt-nconnecta-4x2-con-55418km-2017-urkfhqah",
+  "img": "https://img.ocasionplus.com/CqJ1hUQ5qZU8sUrPj9Zel_ZK9JvXEDj2tmS0kEz6oJ8/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvOTAvNzgvNDkvMy94MDEuanBnPzE1MTkyNjI2MTc2",
+  "bd": [
+   {
+    "k": "Motor",
+    "v": 80,
+    "w": 17,
+    "p": 14
+   },
+   {
+    "k": "Precio",
+    "v": 32,
+    "w": 16,
     "p": 5
+   },
+   {
+    "k": "Fiabilidad",
+    "v": 80,
+    "w": 16,
+    "p": 13
+   },
+   {
+    "k": "Año",
+    "v": 75,
+    "w": 15,
+    "p": 11
+   },
+   {
+    "k": "Madrid",
+    "v": 100,
+    "w": 13,
+    "p": 13
+   },
+   {
+    "k": "Kilómetros",
+    "v": 47,
+    "w": 12,
+    "p": 6
    },
    {
     "k": "Potencia",
@@ -1148,9 +1490,9 @@
    },
    {
     "k": "Kilómetros",
-    "v": 47,
+    "v": 36,
     "w": 12,
-    "p": 6
+    "p": 4
    },
    {
     "k": "Potencia",
@@ -1205,9 +1547,9 @@
    },
    {
     "k": "Kilómetros",
-    "v": 88,
+    "v": 67,
     "w": 12,
-    "p": 11
+    "p": 8
    },
    {
     "k": "Potencia",
@@ -1262,7 +1604,7 @@
    },
    {
     "k": "Kilómetros",
-    "v": 18,
+    "v": 14,
     "w": 12,
     "p": 2
    },
@@ -1319,9 +1661,9 @@
    },
    {
     "k": "Kilómetros",
-    "v": 100,
+    "v": 77,
     "w": 12,
-    "p": 12
+    "p": 9
    },
    {
     "k": "Potencia",
@@ -1376,9 +1718,9 @@
    },
    {
     "k": "Kilómetros",
-    "v": 39,
+    "v": 30,
     "w": 12,
-    "p": 5
+    "p": 4
    },
    {
     "k": "Potencia",
@@ -1390,7 +1732,7 @@
  },
  {
   "id": "umquq0mygrp7",
-  "coche": "Opel Astra 1.4 Turbo S&S Dynamic",
+  "coche": "Title: Opel Astra 1.4 Turbo S&S Dynamic",
   "concesionario": "OcasionPlus Madrid",
   "cv": 150,
   "km": 76487,
@@ -1433,7 +1775,7 @@
    },
    {
     "k": "Kilómetros",
-    "v": 29,
+    "v": 23,
     "w": 12,
     "p": 3
    },
@@ -1446,7 +1788,7 @@
   ]
  },
  {
-  "id": "umqusd6zp1ws",
+  "id": "umqusm9qqab4",
   "coche": "Seat Ibiza 1.0 Full Connect",
   "concesionario": "OcasionPlus Badajoz",
   "cv": 75,
@@ -1459,39 +1801,46 @@
   "img": "https://img.ocasionplus.com/fIaa5lfvni-6M_G6aWXYt2eO-zkcqTOPYLrD9it2H30/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTQvMjQvMjkvMDgvMy94MDEuanBnPzE1MTUyMDQyNzU0",
   "bd": [
    {
-    "k": "Fiabilidad",
-    "v": 7,
-    "w": 22
-   },
-   {
-    "k": "Mecánica",
-    "v": 7,
-    "w": 16
-   },
-   {
-    "k": "Primer coche",
-    "v": 9,
-    "w": 16
+    "k": "Motor",
+    "v": 76,
+    "w": 17,
+    "p": 13
    },
    {
     "k": "Precio",
-    "v": 3,
-    "w": 14
+    "v": 21,
+    "w": 16,
+    "p": 3
    },
    {
-    "k": "Antigüedad",
-    "v": 8,
-    "w": 12
+    "k": "Fiabilidad",
+    "v": 80,
+    "w": 16,
+    "p": 13
    },
    {
-    "k": "Kilómetros",
-    "v": 10,
-    "w": 12
+    "k": "Año",
+    "v": 75,
+    "w": 15,
+    "p": 11
    },
    {
     "k": "Madrid",
-    "v": 4,
-    "w": 8
+    "v": 55,
+    "w": 13,
+    "p": 7
+   },
+   {
+    "k": "Kilómetros",
+    "v": 100,
+    "w": 12,
+    "p": 12
+   },
+   {
+    "k": "Potencia",
+    "v": 100,
+    "w": 11,
+    "p": 11
    }
   ]
  }
