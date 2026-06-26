@@ -296,9 +296,19 @@ const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const $=id=>document.getElementById(id);
 $("dateline").textContent=new Date().toLocaleDateString("es-ES",{day:"2-digit",month:"long",year:"numeric"});
 
+const dedupeKey=c=>(c.url&&c.url.trim())?"u:"+c.url.trim().toLowerCase():"n:"+(c.coche||"").toLowerCase().trim()+"|"+(c.km||"");
+function pruneAdds(){ // quita altas que ya existen en el catálogo (evita duplicados al actualizar coches.json)
+  const cat=new Set(CATALOG.filter(c=>!st.del.includes(c.id)).map(dedupeKey));
+  const before=st.add.length;
+  st.add=st.add.filter(c=>!cat.has(dedupeKey(c)));
+  if(st.add.length!==before)saveState();
+}
 function rebuild(){
-  cars=CATALOG.filter(c=>!st.del.includes(c.id)).map(c=>({...c,...(st.ed[c.id]||{})}));
-  cars=cars.concat(st.add.filter(c=>!st.del.includes(c.id)));
+  pruneAdds();
+  let list=CATALOG.filter(c=>!st.del.includes(c.id)).map(c=>({...c,...(st.ed[c.id]||{})}));
+  list=list.concat(st.add.filter(c=>!st.del.includes(c.id)));
+  const seen=new Set();
+  cars=list.filter(c=>{const k=dedupeKey(c);if(seen.has(k))return false;seen.add(k);return true;});
   cars.forEach(c=>{const o=st.ov[c.id]||{};c.estado=o.estado||"Por ver";c.rec=o.rec||"Pendiente";});
 }
 const find=id=>cars.find(c=>c.id===id);
