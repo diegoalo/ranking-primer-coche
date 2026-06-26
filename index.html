@@ -94,7 +94,7 @@
   #pop .pop-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}
   #pop .pop-h b{font-size:15px;font-weight:800;line-height:1.1}
   #pop .pf-list{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
-  #pop .pf{display:grid;grid-template-columns:78px 1fr 22px;align-items:center;gap:8px}
+  #pop .pf{display:grid;grid-template-columns:108px 1fr 34px;align-items:center;gap:8px}
   #pop .pf span{font-family:"Geist Mono",monospace;font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
   #pop .pf i{display:block;height:7px;background:#e6e5df;border:1px solid var(--hair)}
   #pop .pf i b{display:block;height:100%;background:var(--ink)}
@@ -268,6 +268,7 @@ const colorEstado={"Por ver":"#bdbcb5","Contactado":"#3b5bdb","Cita pedida":"var
 const noacc=s=>(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"");
 const SCOLOR={g:"var(--green)",o:"var(--orange)",r:"var(--red)"};
 const scoreClass=s=>s>=70?"g":s>=55?"o":"r";
+const scoreClass10=n=>n>=7?"g":n>=5?"o":"r";
 
 // Catálogo embebido (fallback al abrir en local). La fuente real es coches.json.
 const SEED=[
@@ -304,56 +305,103 @@ const find=id=>cars.find(c=>c.id===id);
 const inCatalog=id=>CATALOG.some(c=>c.id===id);
 
 /* Scoring */
-function brandRel(coche){
+// Reputación por marca: rel=fiabilidad (1-10), first=idoneidad como primer coche (1-10)
+const BRANDS={
+  toyota:{rel:10,first:9,rep:"fiabilidad de referencia",probs:[]},
+  lexus:{rel:10,first:7,rep:"fiabilidad excelente",probs:["recambios y seguro más caros"]},
+  honda:{rel:9,first:9,rep:"mecánica muy robusta",probs:[]},
+  mazda:{rel:9,first:9,rep:"muy fiables y nobles",probs:["óxido en bajos en zonas húmedas"]},
+  suzuki:{rel:9,first:9,rep:"ligeros, simples y fiables",probs:[]},
+  hyundai:{rel:9,first:9,rep:"fiables, buena garantía",probs:[]},
+  kia:{rel:9,first:9,rep:"fiables, buena garantía",probs:[]},
+  dacia:{rel:8,first:9,rep:"sencillos y baratos de mantener",probs:["acabados justos"]},
+  skoda:{rel:8,first:8,rep:"buen valor del grupo VAG",probs:["motores TSI/cambios DSG del grupo"]},
+  subaru:{rel:8,first:6,rep:"robustos",probs:["consumo y seguro altos"]},
+  volvo:{rel:8,first:6,rep:"seguros y sólidos",probs:["mantenimiento caro"]},
+  nissan:{rel:8,first:8,rep:"correctos y prácticos",probs:["cambios CVT en algunas versiones"]},
+  seat:{rel:7,first:8,rep:"populares y baratos de mantener",probs:["motores 1.2/1.4 TSI del grupo VAG con su histórico"]},
+  volkswagen:{rel:7,first:7,rep:"buen producto, mantenimiento medio",probs:["TSI antiguos: aceite/cadena","DSG: revisiones"]},
+  ford:{rel:7,first:8,rep:"muy popular como primer coche",probs:["1.0 EcoBoost antiguo: refrigeración"]},
+  opel:{rel:7,first:7,rep:"correctos",probs:["según año, base PSA o GM","electrónica"]},
+  mini:{rel:6,first:6,rep:"divertidos pero caros de mantener",probs:["averías y seguro elevados"]},
+  peugeot:{rel:6,first:7,rep:"cómodos, fiabilidad media",probs:["PureTech: correa en aceite","electrónica"]},
+  citroen:{rel:6,first:7,rep:"cómodos, fiabilidad media",probs:["PureTech: correa en aceite","suspensión/electrónica"]},
+  renault:{rel:6,first:7,rep:"populares, fiabilidad media",probs:["electrónica","algún dCi/TCe delicado"]},
+  fiat:{rel:6,first:7,rep:"urbanos populares, fiabilidad justa",probs:["electrónica","desgaste de acabados"]},
+  bmw:{rel:7,first:5,rep:"premium, caros para empezar",probs:["mantenimiento y seguro altos","propulsión trasera para novel"]},
+  audi:{rel:7,first:5,rep:"premium, caros para empezar",probs:["mantenimiento y seguro altos"]},
+  mercedes:{rel:7,first:5,rep:"premium, caros para empezar",probs:["mantenimiento y seguro altos"]},
+  alfa:{rel:5,first:4,rep:"con carácter pero delicados",probs:["fiabilidad y electrónica"]},
+};
+const MODEL_FIRST={fiesta:9,ibiza:8,polo:8,corsa:9,clio:9,"208":9,"2008":7,yaris:9,aygo:9,i10:9,i20:9,micra:9,"500":9,twingo:9,panda:8,sandero:9,swift:9,picanto:9,rio:8,leon:7,golf:7,focus:7,astra:7,megane:7};
+function brandInfo(coche){
   const s=(coche||"").toLowerCase();
-  const models={i20:.9,i10:.9,i30:.88,yaris:.93,aygo:.85,corolla:.95,ibiza:.8,leon:.8,arona:.8,polo:.84,golf:.8,fabia:.86,corsa:.7,astra:.69,clio:.73,captur:.7,"208":.7,"2008":.7,fiesta:.8,focus:.76,"500":.66,panda:.66,micra:.74,sandero:.82,duster:.8,swift:.9,picanto:.86,rio:.86};
-  for(const m in models) if(new RegExp("\\b"+m+"\\b").test(s)) return models[m];
-  const brands={lexus:.97,toyota:.95,honda:.92,mazda:.9,suzuki:.89,hyundai:.9,kia:.88,subaru:.85,dacia:.82,volvo:.82,skoda:.85,seat:.79,volkswagen:.79,nissan:.8,ford:.75,audi:.75,mini:.7,bmw:.74,mercedes:.74,peugeot:.7,renault:.7,opel:.69,"citroën":.68,citroen:.68,fiat:.6,alfa:.58};
-  for(const b in brands) if(s.includes(b)) return brands[b];
-  return .72;
+  let k=null; for(const b in BRANDS) if(s.includes(b)){k=b;break;}
+  const base=BRANDS[k]||{rel:7,first:6,rep:"reputación media",probs:[]};
+  let first=base.first;
+  for(const m in MODEL_FIRST){if(new RegExp("\\b"+m+"\\b").test(s)){first=Math.max(first,MODEL_FIRST[m]);break;}}
+  return {rel:base.rel,first,rep:base.rep,probs:base.probs};
 }
-function engineRel(coche,anio){
+function engineInfo(coche,anio){
   const s=(coche||"").toLowerCase();
-  if(/(tdi|dci|hdi|cdti|crdi|bluehdi|d4d|d-4d|diesel|diésel)/.test(s)) return {v:.77,note:"Diésel: menos ideal para ciudad y zonas de bajas emisiones",bad:true};
-  if(/(mpi|mpfi|atmosf|\b16v\b|\bvvt\b|\bvti\b|vct|ti-vct|dual\s?vvt)/.test(s) && !/(tsi|tfsi|turbo|tce|thp|ecoboost|tgdi|t-gdi|puretech)/.test(s)) return {v:.9,note:"Motor atmosférico: mecánica simple y muy fiable",good:true};
-  if(/1\.?2\s*tsi/.test(s) && anio && anio<=2014) return {v:.45,note:"1.2 TSI antiguo (EA111): cadena de distribución y consumo de aceite reportados",bad:true};
-  if(/puretech/.test(s)) return {v:.7,note:"PureTech 1.2: vigilar la correa de distribución en aceite",bad:true};
-  if(/(ecotsi|tsi|tfsi|tce|thp|ecoboost|tgdi|t-gdi|dig-?t|turbo)/.test(s)) return {v:.8,note:"Turbo gasolina moderno"};
-  return {v:.76,note:""};
+  if(/(tdi|dci|hdi|cdti|crdi|bluehdi|d4d|d-4d|diesel|diésel)/.test(s)) return {n:6,good:false,probs:["diésel: el FAP/EGR sufre en ciudad y encaja peor en zonas de bajas emisiones"]};
+  if(/1\.?2\s*tsi/.test(s) && anio && anio<=2014) return {n:3,good:false,probs:["1.2 TSI antiguo (EA111): estiramiento de cadena y consumo de aceite"]};
+  if(/puretech/.test(s)) return {n:5,good:false,probs:["PureTech 1.0/1.2: correa de distribución bañada en aceite (revisar/cambiar a tiempo)"]};
+  if(/ecoboost/.test(s) && anio && anio<=2018) return {n:6,good:false,probs:["1.0 EcoBoost de primeras series: problemas de refrigeración"]};
+  if(/(mpi|mpfi|atmosf|\b16v\b|\bvvt\b|\bvti\b|vct|ti-vct|dualjet|dual\s?vvt)/.test(s) && !/(tsi|tfsi|turbo|tce|thp|ecoboost|tgdi|t-gdi|puretech)/.test(s)) return {n:9,good:true,probs:[]};
+  if(/(ecotsi|tsi|tfsi)/.test(s)) return {n:7,good:false,probs:["algunos TSI consumen algo de aceite: vigilar nivel"]};
+  if(/(tce|thp|tgdi|t-gdi|dig-?t|turbo)/.test(s)) return {n:7,good:false,probs:[]};
+  return {n:7,good:false,probs:[]};
 }
-function powerScore(cv){ if(!cv)return .6; if(cv>=75&&cv<=115)return 1; if(cv<75)return clamp(.85-(75-cv)*.012,.5,.85); if(cv<=140)return .78; if(cv<=180)return .52; return .32; }
-function locScore(text){ const s=(text||"").toLowerCase();
-  if(/madrid/.test(s))return 1;
-  if(/(toledo|guadalajara|segovia|ávila|avila|cuenca)/.test(s))return .72;
-  if(/(barcelona|valencia|zaragoza|sevilla|bilbao|vizcaya|málaga|malaga|murcia|coru|vigo|ourense|córdoba|cordoba|santander|alicante)/.test(s))return .42;
-  if(!s.trim())return .6; return .55;
+function powerFit(cv){ if(!cv)return 6; if(cv>=75&&cv<=115)return 10; if(cv<75)return 7; if(cv<=130)return 7; if(cv<=160)return 4; if(cv<=200)return 2; return 1; }
+function locNota(text){ const s=(text||"").toLowerCase();
+  if(/madrid/.test(s))return 10;
+  if(/(toledo|guadalajara|segovia|ávila|avila|cuenca|ciudad real)/.test(s))return 7;
+  if(!s.trim())return 6;
+  return 4;
 }
 function scoreCar(c,ctx){
   const cv=+c.cv||0,anio=+c.anio||0,km=+c.km||0,precio=+c.precio||0;
-  const ps = precio>0 && ctx.maxP>ctx.minP ? 1-(precio-ctx.minP)/(ctx.maxP-ctx.minP) : .65;
-  const ks = km>0 && ctx.maxK>ctx.minK ? 1-(km-ctx.minK)/(ctx.maxK-ctx.minK) : .65;
-  const ys = anio? clamp((anio-2008)/12,0,1):.5;
-  const pw = powerScore(cv), br = brandRel(c.coche), en = engineRel(c.coche,anio);
-  const lo = locScore((c.concesionario||"")+" "+(c.url||""));
-  const total = ps*.16+ks*.12+ys*.15+pw*.11+br*.16+en.v*.17+lo*.13;
+  const bi=brandInfo(c.coche), en=engineInfo(c.coche,anio), pf=powerFit(cv);
+  const nFiab=clamp(Math.round(bi.rel*0.7+en.n*0.3),1,10);
+  const nMotor=en.n;
+  const nPrimer=clamp(Math.round(bi.first*0.6+pf*0.4),1,10);
+  const nPrecio = precio>0&&ctx.maxP>ctx.minP ? clamp(Math.round(1+9*(1-(precio-ctx.minP)/(ctx.maxP-ctx.minP))),1,10) : 6;
+  const nKm = km>0&&ctx.maxK>ctx.minK ? clamp(Math.round(1+9*(1-(km-ctx.minK)/(ctx.maxK-ctx.minK))),1,10) : 6;
+  const nAnio = anio ? clamp(Math.round(1+9*clamp((anio-2007)/13,0,1)),1,10) : 5;
+  const nMadrid = locNota((c.concesionario||"")+" "+(c.url||""));
+  const W={fiab:22,motor:16,primer:16,precio:14,anio:12,km:12,madrid:8};
+  const total=Math.round((nFiab*W.fiab+nMotor*W.motor+nPrimer*W.primer+nPrecio*W.precio+nAnio*W.anio+nKm*W.km+nMadrid*W.madrid)/100*10);
   const pros=[],cons=[];
-  if(ps>=.7)pros.push("Precio competitivo"); else if(ps<=.3)cons.push("De los más caros de la lista");
-  if(br>=.88)pros.push("Marca muy fiable"); else if(br<.7)cons.push("Marca con fiabilidad media");
-  if(en.good)pros.push(en.note); if(en.bad)cons.push(en.note);
-  if(ks>=.7)pros.push("Kilometraje bajo"); else if(ks<=.3)cons.push("Kilometraje alto");
-  if(anio>=2017)pros.push("Matriculación reciente"); else if(anio&&anio<=2013)cons.push("Modelo antiguo");
-  if(pw>=1)pros.push("Potencia ideal para primer coche"); else if(cv>140)cons.push("Bastante potente: seguro más caro");
-  if(lo>=1)pros.push("En Madrid, sin traslado"); else if(lo<=.45)cons.push("Fuera de Madrid: habría que traerlo");
+  if(bi.rel>=9)pros.push("Marca de fiabilidad sobresaliente ("+bi.rep+")");
+  else if(bi.rel>=8)pros.push("Marca fiable ("+bi.rep+")");
+  else if(bi.rel<=6)cons.push("Marca de fiabilidad media ("+bi.rep+")");
+  if(bi.first>=9)pros.push("De los modelos más recomendados como primer coche: barato de asegurar y mantener");
+  else if(bi.first>=8)pros.push("Buena opción para primer coche");
+  else if(bi.first<=5)cons.push("Poco idóneo para primer coche: seguro y mantenimiento caros");
+  if(en.good)pros.push("Mecánica sencilla y robusta (motor atmosférico, sin turbo)");
+  (en.probs||[]).forEach(p=>cons.push(p));
+  (bi.probs||[]).forEach(p=>cons.push("Marca: "+p));
+  if(nPrecio>=8)pros.push("Precio muy competitivo de la lista");
+  else if(nPrecio<=3)cons.push("De los más caros de la lista");
+  if(nKm>=8)pros.push("Kilometraje bajo para su antigüedad");
+  else if(nKm<=3)cons.push("Kilometraje alto");
+  if(anio>=2019)pros.push("Matriculación reciente");
+  else if(anio&&anio<=2013)cons.push("Coche con bastantes años");
+  if(pf>=10)pros.push("Potencia contenida: fácil de conducir y seguro más barato");
+  else if(cv>140)cons.push("Bastante potente: seguro más caro y menos dócil para empezar");
+  if(nMadrid>=10)pros.push("Disponible en Madrid, sin gastos de traslado");
+  else if(nMadrid<=4)cons.push("Fuera de Madrid: habría que traerlo");
   const bd=[
-    {k:"Motor",v:Math.round(en.v*100),w:17},
-    {k:"Precio",v:Math.round(ps*100),w:16},
-    {k:"Fiabilidad",v:Math.round(br*100),w:16},
-    {k:"Año",v:Math.round(ys*100),w:15},
-    {k:"Madrid",v:Math.round(lo*100),w:13},
-    {k:"Kilómetros",v:Math.round(ks*100),w:12},
-    {k:"Potencia",v:Math.round(pw*100),w:11},
-  ].map(x=>({...x,p:Math.round(x.v*x.w/100)}));
-  return {score:Math.round(total*100),pros,cons,bd};
+    {k:"Fiabilidad",v:nFiab,w:22},
+    {k:"Mecánica",v:nMotor,w:16},
+    {k:"Primer coche",v:nPrimer,w:16},
+    {k:"Precio",v:nPrecio,w:14},
+    {k:"Antigüedad",v:nAnio,w:12},
+    {k:"Kilómetros",v:nKm,w:12},
+    {k:"Madrid",v:nMadrid,w:8},
+  ];
+  return {score:total,pros,cons,bd};
 }
 function scoreAll(){
   const pr=cars.map(c=>+c.precio).filter(n=>n>0),km=cars.map(c=>+c.km).filter(n=>n>0);
@@ -438,13 +486,13 @@ function render(){
   b.querySelectorAll("[data-del]").forEach(x=>x.onclick=e=>delCar(e.target.dataset.del));
 }
 function popHTML(c){
-  const bars=(c.bd||[]).map(f=>`<div class="pf"><span>${f.k}</span><i><b class="${scoreClass(f.v)}" style="width:${f.v}%"></b></i><em>${f.p}</em></div>`).join("");
+  const bars=(c.bd||[]).map(f=>`<div class="pf"><span>${f.k} · ${f.w}%</span><i><b class="${scoreClass10(f.v)}" style="width:${f.v*10}%"></b></i><em>${f.v}/10</em></div>`).join("");
   const pros=(c.pros||[]).map(p=>`<li>${p}</li>`).join("");
   const cons=(c.cons||[]).map(p=>`<li class="bad">${p}</li>`).join("");
   return `<div class="pop-h"><b>${c.coche}</b><span class="scorepill ${scoreClass(c.score)}">${c.score}</span></div>
     <div class="pf-list">${bars}</div>
     <ul class="pop-pc">${pros}${cons}</ul>
-    <div class="pop-foot">Cada barra: nota del apartado (0–100). El número es su aportación al total ponderada por su peso.</div>`;
+    <div class="pop-foot">Cada criterio se puntúa de 1 a 10; el % es su peso en la nota final (${c.score}/100).</div>`;
 }
 function placePop(ev){const p=$("pop");const w=p.offsetWidth||300,h=p.offsetHeight||260;
   let x=ev.clientX+16,y=ev.clientY+16;
