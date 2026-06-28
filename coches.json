@@ -26,19 +26,6 @@
   "img": "https://img.ocasionplus.com/2OkVquDPlw-pcOpGNA6XXr6granXw4gyWJY0harzzK4/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvMTgvNTkvMjEvNC94MDEuanBnPzE1MTc1Nzg4Mjkx"
  },
  {
-  "id": "c8",
-  "coche": "Ford Ka+ 1.2 Ti-VCT White Edition",
-  "concesionario": "OcasionPlus Ourense",
-  "cv": 85,
-  "km": 64387,
-  "precio": 9990,
-  "anio": 2019,
-  "comb": "Gasolina",
-  "cambio": "Manual",
-  "url": "https://www.ocasionplus.com/coches-segunda-mano/ford-ka-12-tivct-white-edition-con-64387km-2019-uodwcqad",
-  "img": "https://img.ocasionplus.com/R2LBSe8IQ6MN0RulPiDbmag04QygdDXUEUULrkE5HL4/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvODUvMDgvMzIvNS94MDEuanBnPzE1MTkyMTQwNzU1"
- },
- {
   "id": "umqu2tiew7tm",
   "coche": "KIA Rio 1.2 CVVT Concept",
   "concesionario": "OcasionPlus Madrid",
@@ -426,6 +413,106 @@
    {
     "k": "Madrid",
     "v": 4,
+    "w": 8
+   }
+  ]
+ },
+ {
+  "id": "umqydjaqppqu",
+  "coche": "KIA Rio 1.2 CVVT Concept",
+  "concesionario": "OcasionPlus Cantabria",
+  "cv": 84,
+  "km": 50023,
+  "precio": 10550,
+  "anio": 2017,
+  "comb": "Gasolina",
+  "cambio": "Manual",
+  "url": "https://www.ocasionplus.com/coches-segunda-mano/kia-rio-12-cvvt-concept-con-50023km-2017-ulogjqaf",
+  "img": "https://img.ocasionplus.com/H8D00YVHuDOu1qzrBYK7aPpXTDuyEB8tn5oWy7H1hns/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTYvMTAvNzIvNzYvNC94MDEuanBnPzE1MTk2NjM5MTAy",
+  "bd": [
+   {
+    "k": "Fiabilidad",
+    "v": 8,
+    "w": 22
+   },
+   {
+    "k": "Mecánica",
+    "v": 7,
+    "w": 16
+   },
+   {
+    "k": "Primer coche",
+    "v": 9,
+    "w": 16
+   },
+   {
+    "k": "Precio",
+    "v": 3,
+    "w": 14
+   },
+   {
+    "k": "Antigüedad",
+    "v": 8,
+    "w": 12
+   },
+   {
+    "k": "Kilómetros",
+    "v": 6,
+    "w": 12
+   },
+   {
+    "k": "Madrid",
+    "v": 4,
+    "w": 8
+   }
+  ]
+ },
+ {
+  "id": "umqydlfdgr1m",
+  "coche": "Hyundai ix20 1.4 MPI BlueDrive 25 Aniversario",
+  "concesionario": "OcasionPlus Madrid",
+  "cv": 90,
+  "km": 67065,
+  "precio": 11450,
+  "anio": 2017,
+  "comb": "Gasolina",
+  "cambio": "Manual",
+  "url": "https://www.ocasionplus.com/coches-segunda-mano/hyundai-ix20-14-mpi-bluedrive-25-aniversario-con-67065km-2017-u4mewqaz",
+  "img": "https://img.ocasionplus.com/AiFSHnwtwzryTD999u5zifPVZKgakXxDkpoqRIGfSRA/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvNjcvODEvMjUvMi94MDEuanBnPzE1MTg2NzIwMDg4",
+  "bd": [
+   {
+    "k": "Fiabilidad",
+    "v": 9,
+    "w": 22
+   },
+   {
+    "k": "Mecánica",
+    "v": 9,
+    "w": 16
+   },
+   {
+    "k": "Primer coche",
+    "v": 9,
+    "w": 16
+   },
+   {
+    "k": "Precio",
+    "v": 1,
+    "w": 14
+   },
+   {
+    "k": "Antigüedad",
+    "v": 8,
+    "w": 12
+   },
+   {
+    "k": "Kilómetros",
+    "v": 4,
+    "w": 12
+   },
+   {
+    "k": "Madrid",
+    "v": 10,
     "w": 8
    }
   ]
