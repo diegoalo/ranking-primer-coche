@@ -13,19 +13,6 @@
   "img": "https://img.ocasionplus.com/8B48FDQ2ca5hhpfa7zzogrJMfcZjqbRe0DTzlqq2LCE/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvNjkvODUvNzUvNi94MDEuanBnPzE1MTkyMjk4ODMx"
  },
  {
-  "id": "c3",
-  "coche": "Seat Ibiza 1.2 TSI Style",
-  "concesionario": "OcasionPlus Madrid (Getafe)",
-  "cv": 105,
-  "km": 84233,
-  "precio": 8200,
-  "anio": 2013,
-  "comb": "Gasolina",
-  "cambio": "Manual",
-  "url": "https://www.ocasionplus.com/coches-segunda-mano/seat-ibiza-12-tsi-style-con-84233km-2013-tm8fxqal",
-  "img": "https://img.ocasionplus.com/2OkVquDPlw-pcOpGNA6XXr6granXw4gyWJY0harzzK4/thumbnail_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTUvMTgvNTkvMjEvNC94MDEuanBnPzE1MTc1Nzg4Mjkx"
- },
- {
   "id": "umqu2tiew7tm",
   "coche": "KIA Rio 1.2 CVVT Concept",
   "concesionario": "OcasionPlus Madrid",
@@ -518,58 +505,8 @@
   ]
  },
  {
-  "id": "umr0v6azkrlc",
-  "coche": "Title: Toyota Yaris 1.3 100 Feel",
-  "concesionario": "OcasionPlus Madrid",
-  "cv": 99,
-  "km": 75354,
-  "precio": 11290,
-  "anio": 2016,
-  "comb": "Gasolina",
-  "cambio": "Manual",
-  "url": "https://www.ocasionplus.com/coches-segunda-mano/toyota-yaris-13-100-feel-con-75354km-2016-rs0apqa1",
-  "img": "https://img.ocasionplus.com/8oFBTKUlSq4WPADa85VDwrshFrl0wK7QHYTLZxgIJNc/normal_ao_auto/aHR0cHM6Ly9mb3Rvcy5lc3RhdGljb3NtZi5jb20vZm90b3NfYW51bmNpb3MvMDAvMTMvNzAvOTAvODQvMi94MDEuanBnPzE1MTQwNTczMTY2",
-  "bd": [
-   {
-    "k": "Fiabilidad",
-    "v": 9,
-    "w": 22
-   },
-   {
-    "k": "Mecánica",
-    "v": 7,
-    "w": 16
-   },
-   {
-    "k": "Primer coche",
-    "v": 9,
-    "w": 16
-   },
-   {
-    "k": "Precio",
-    "v": 4,
-    "w": 14
-   },
-   {
-    "k": "Antigüedad",
-    "v": 7,
-    "w": 12
-   },
-   {
-    "k": "Kilómetros",
-    "v": 3,
-    "w": 12
-   },
-   {
-    "k": "Madrid",
-    "v": 10,
-    "w": 8
-   }
-  ]
- },
- {
   "id": "umr0v7kj12bc",
-  "coche": "Title: Nissan Micra IG-T N-Connecta",
+  "coche": "Nissan Micra IG-T N-Connecta",
   "concesionario": "OcasionPlus Madrid",
   "cv": 100,
   "km": 38348,
@@ -647,7 +584,7 @@
    },
    {
     "k": "Precio",
-    "v": 2,
+    "v": 3,
     "w": 14
    },
    {
